@@ -141,6 +141,7 @@ void Compile::register_intrinsic(CallGenerator* cg) {
   assert(find_intrinsic(cg->method(), cg->is_virtual()) == cg, "registration worked");
 }
 
+#include "_Roj234_FastJNI.hpp"
 CallGenerator* Compile::find_intrinsic(ciMethod* m, bool is_virtual) {
   assert(m->is_loaded(), "don't try this on unloaded methods");
   if (_intrinsics.length() > 0) {
@@ -150,9 +151,18 @@ CallGenerator* Compile::find_intrinsic(ciMethod* m, bool is_virtual) {
       return _intrinsics.at(index);
     }
   }
+
   // Lazily create intrinsics for intrinsic IDs well-known in the runtime.
-  if (m->intrinsic_id() != vmIntrinsics::_none &&
-      m->intrinsic_id() <= vmIntrinsics::LAST_COMPILER_INLINE) {
+  if (m->intrinsic_id() == vmIntrinsics::_none) {
+    if (checkIsFastJni(m)) {
+        CallGenerator* cg = make_vm_intrinsic(m, is_virtual);
+        if (cg != nullptr) {
+            // Save it for next time:
+            register_intrinsic(cg);
+            return cg;
+        }
+    }
+  } else if (m->intrinsic_id() <= vmIntrinsics::LAST_COMPILER_INLINE) {
     CallGenerator* cg = make_vm_intrinsic(m, is_virtual);
     if (cg != nullptr) {
       // Save it for next time:

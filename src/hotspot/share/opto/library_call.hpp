@@ -57,6 +57,7 @@ class LibraryIntrinsic : public InlineCallGenerator {
   virtual int  predicates_count() const { return _predicates_count; }
   virtual bool does_virtual_dispatch()   const { return _does_virtual_dispatch; }
   virtual JVMState* generate(JVMState* jvms);
+  virtual JVMState* _generate(JVMState* jvms);
   virtual Node* generate_predicate(JVMState* jvms, int predicate);
   vmIntrinsics::ID intrinsic_id() const { return _intrinsic_id; }
 };

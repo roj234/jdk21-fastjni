@@ -40,10 +40,10 @@ on:
         default: 'x86.x64'
       make-target:
         required: true
-        default: 'product-bundles test-bundles'
+        default: 'product-bundles'
       debug-levels:
         required: true
-        default: '[ "debug", "release" ]'
+        default: '[ "release" ]'
   workflow_call:
     inputs:
       platform:

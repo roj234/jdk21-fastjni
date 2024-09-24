@@ -62,12 +62,15 @@
 //---------------------------make_vm_intrinsic----------------------------
 CallGenerator* Compile::make_vm_intrinsic(ciMethod* m, bool is_virtual) {
   vmIntrinsicID id = m->intrinsic_id();
-  assert(id != vmIntrinsics::_none, "must be a VM intrinsic");
 
   if (!m->is_loaded()) {
     // Do not attempt to inline unloaded methods.
     return nullptr;
   }
+
+  //assert(id != vmIntrinsics::_none, "must be a VM intrinsic");
+  //trigger when encounter _FastJNI method name
+  if (id == vmIntrinsics::_none) return new LibraryIntrinsic(m, is_virtual, 0, false, vmIntrinsics::_none);
 
   C2Compiler* compiler = (C2Compiler*)CompileBroker::compiler(CompLevel_full_optimization);
   bool is_available = false;
@@ -96,7 +99,7 @@ CallGenerator* Compile::make_vm_intrinsic(ciMethod* m, bool is_virtual) {
   }
 }
 
-#include "_Roj234_FastJNI.hpp"
+#include "_Roj234_FastJNI.cpp_inc.hpp"
 JVMState* LibraryIntrinsic::_generate(JVMState* jvms) {
   LibraryCallKit kit(jvms, this);
   Compile* C = kit.C;
