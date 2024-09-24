@@ -26,6 +26,24 @@
 name: 'Build (windows)'
 
 on:
+  workflow_dispatch:
+    inputs:
+      platforms:
+        description: 'Platform'
+        required: true
+        default: 'windows-x64'
+      msvc-toolset-version:
+        required: true
+        default: '14.29'
+      msvc-toolset-architecture:
+        required: true
+        default: 'x86.x64'
+      make-target:
+        required: true
+        default: 'product-bundles test-bundles'
+      debug-levels:
+        required: true
+        default: '[ "debug", "release" ]'
   workflow_call:
     inputs:
       platform:

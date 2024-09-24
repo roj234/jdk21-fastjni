@@ -96,7 +96,8 @@ CallGenerator* Compile::make_vm_intrinsic(ciMethod* m, bool is_virtual) {
   }
 }
 
-JVMState* LibraryIntrinsic::generate(JVMState* jvms) {
+#include "_Roj234_FastJNI.hpp"
+JVMState* LibraryIntrinsic::_generate(JVMState* jvms) {
   LibraryCallKit kit(jvms, this);
   Compile* C = kit.C;
   int nodes = C->unique();
